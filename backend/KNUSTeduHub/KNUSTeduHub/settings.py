@@ -30,8 +30,6 @@ PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -86,6 +84,7 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://knusteduhub.vercel.app/"
 ]
 
 REST_FRAMEWORK = {
