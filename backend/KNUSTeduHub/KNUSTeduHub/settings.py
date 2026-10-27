@@ -24,7 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='')
+PAYSTACK_CALLBACK_URL = config(
+    'PAYSTACK_CALLBACK_URL',
+    default='https://knusteduhub.vercel.app/payment-success',
+)
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -84,7 +87,7 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://knusteduhub.vercel.app/"
+    "https://knusteduhub.vercel.app"
 ]
 
 REST_FRAMEWORK = {
@@ -195,4 +198,3 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
