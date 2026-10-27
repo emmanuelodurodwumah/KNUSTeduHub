@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Armchair, Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
@@ -16,6 +16,26 @@ const NavBar = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [menuOpen, setMenuOpen] = useState(false)
+    const [accountMenuOpen, setAccountMenuOpen] = useState(false)
+    const accountMenuRef = useRef(null)
+
+    useEffect(() => {
+        const closeAccountMenu = (event) => {
+            if (!accountMenuRef.current?.contains(event.target)) {
+                setAccountMenuOpen(false)
+            }
+        }
+        const closeOnEscape = (event) => {
+            if (event.key === 'Escape') setAccountMenuOpen(false)
+        }
+
+        document.addEventListener('click', closeAccountMenu)
+        document.addEventListener('keydown', closeOnEscape)
+        return () => {
+            document.removeEventListener('click', closeAccountMenu)
+            document.removeEventListener('keydown', closeOnEscape)
+        }
+    }, [])
 
     useEffect(() => {
         if (!accessToken || adminStatusLoaded) return undefined
@@ -90,24 +110,30 @@ const NavBar = () => {
                         <span className='hidden sm:inline'>Cart</span>
                     </Link>
 
-                    <div className='dropdown dropdown-end'>
+                    <div ref={accountMenuRef} className='relative'>
                         <button
                             type='button'
                             aria-label='Account menu'
+                            aria-expanded={accountMenuOpen}
+                            aria-controls='account-menu'
+                            onClick={() => setAccountMenuOpen((open) => !open)}
                             className='flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-slate-600 transition hover:bg-gray-50'
                         >
                             <User size={19} />
                         </button>
-                        <ul className='menu dropdown-content z-50 mt-2 w-52 rounded-box border border-gray-100 bg-base-100 p-2 shadow-lg'>
+                        <ul
+                            id='account-menu'
+                            className={`${accountMenuOpen ? 'block' : 'hidden'} menu absolute right-0 top-full z-50 mt-2 w-52 rounded-box border border-gray-100 bg-base-100 p-2 shadow-lg`}
+                        >
                             {username ? (
                                 <>
                                     <li><span className='text-sm text-gray-500'>{username}</span></li>
-                                    <li><button type='button' onClick={logout}>Logout</button></li>
+                                    <li><button type='button' onClick={() => { logout(); setAccountMenuOpen(false) }}>Logout</button></li>
                                 </>
                             ) : (
                                 <>
-                                    <li><Link to='/login'>Login</Link></li>
-                                    <li><Link to='/register'>Create account</Link></li>
+                                    <li><Link to='/login' onClick={() => setAccountMenuOpen(false)}>Login</Link></li>
+                                    <li><Link to='/register' onClick={() => setAccountMenuOpen(false)}>Create account</Link></li>
                                 </>
                             )}
                         </ul>
