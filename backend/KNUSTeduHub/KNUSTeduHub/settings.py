@@ -28,7 +28,7 @@ PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='')
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
